@@ -10,9 +10,15 @@ class EightPuzzle:
         open_list = []
         closed_list = []
 
-        start_node = Node([0, 7, 5, 4, 2, 6, 1, 3, 8], 0)
+        start_node = Node([1, 2, 3, 4, 5, 6, 7, 8, 0], 0)
         open_list.append(start_node)
 
+        # Check if puzzle is solvable
+        if not self.puzzle_solvable(start_node.representation):
+            print('Puzzle is not solvable')
+            return
+
+        print('Puzzle is solvable... \n')
         while len(open_list) > 0:
             # Get node with best (lowest) f_score
             current_node = min(open_list, key=attrgetter('f_score'))
@@ -58,10 +64,19 @@ class EightPuzzle:
         print(current_node)
         return
 
-    def puzzle_solvable(self):
-        """TODO not all 8puzzles are solvable. Check if this one is"""
+    def puzzle_solvable(self, start_state):
         # https://math.stackexchange.com/questions/293527/how-to-check-if-a-8-puzzle-is-solvable
-        pass
+        # Puzzle is solvable if total number of inversions is even and unsolvable when it is odd
+        inversions = 0
+        state = start_state.copy()
+        state.remove(0)
+        for i in range(len(state)):
+            for j in range(i + 1, len(state)):
+                if state[i] > state[j]:
+                    inversions += 1
+
+        return inversions % 2 == 0
+
 
 if __name__ == '__main__':
     a = EightPuzzle()
