@@ -10,7 +10,7 @@ class EightPuzzle:
         open_list = []
         closed_list = []
 
-        start_node = Node([1, 2, 3, 4, 5, 6, 7, 8, 0], 0)
+        start_node = Node([7, 1, 4, 8, 0, 6, 2, 5, 3], 0)
         open_list.append(start_node)
 
         # Check if puzzle is solvable
@@ -25,6 +25,7 @@ class EightPuzzle:
             # if 0 misplaced tiles -> puzzle is solved
             if current_node.h_score == 0:
                 self.print_path(current_node)
+                print(f'Depth level: {current_node.g_score}')
                 break
 
             open_list.remove(current_node)
