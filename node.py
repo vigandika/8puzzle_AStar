@@ -4,7 +4,6 @@ from typing import List
 class Node:
 
     def __init__(self, representation, g_score):
-        super().__init__()
         self.representation = representation
         self.h_score = self.generate_heuristic(representation)
         self.g_score = g_score
