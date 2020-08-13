@@ -1,4 +1,6 @@
 # optimization https://github.com/jd12/8puzzle-student -> Critical Optimization
+import random
+import time
 from operator import attrgetter
 
 from node import Node
@@ -9,17 +11,19 @@ class EightPuzzle:
     def __init__(self, representation):
         self.representation = representation
 
-    def solve_8puzzle(self):
+    def solve_8puzzle(self, heuristics):
         # pseudo-code: https://medium.com/@nicholas.w.swift/easy-a-star-pathfinding-7e6689c7f7b2
+        start_time = time.time()
+
         open_list = []
         closed_list = []
 
-        start_node = Node(self.representation, 0)
+        start_node = Node(representation=self.representation, g_score=0, heuristics=heuristics)
         open_list.append(start_node)
 
         # Check if puzzle is solvable
-        if not self.puzzle_solvable(start_node.representation):
-            print('Puzzle is not solvable')
+        if not self.is_solvable(start_node.representation):
+            print('Puzzle: \n\n', start_node, '\nis NOT solvable.')
             return
 
         print('Puzzle is solvable... \n')
@@ -29,7 +33,8 @@ class EightPuzzle:
             # if 0 misplaced tiles -> puzzle is solved
             if current_node.h_score == 0:
                 self.print_path(current_node)
-                print(f'Depth level: {current_node.g_score}')
+                print(f'Depth level:  {current_node.g_score}')
+                print(f'Time elapsed: {round((time.time() - start_time), 2)} seconds')
                 break
 
             open_list.remove(current_node)
@@ -69,7 +74,8 @@ class EightPuzzle:
         print(current_node)
         return
 
-    def puzzle_solvable(self, start_state):
+    @staticmethod
+    def is_solvable(start_state):
         # https://math.stackexchange.com/questions/293527/how-to-check-if-a-8-puzzle-is-solvable
         # Puzzle is solvable if total number of inversions is even and unsolvable when it is odd
         inversions = 0
@@ -81,3 +87,7 @@ class EightPuzzle:
                     inversions += 1
 
         return inversions % 2 == 0
+
+    @staticmethod
+    def random_puzzle_generator():
+        return random.sample(range(0, 9), 9)
